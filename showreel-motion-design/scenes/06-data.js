@@ -1,0 +1,16 @@
+// Scène 06 — Data storytelling (provisoire : à remplacer).
+'use strict';
+(() => {
+  const { W, H, C, F } = R;
+  R.scene({
+    id: '06', title: 'Data storytelling', tag: 'DATA STORYTELLING', bars: 6, theme: 'dark', accent: C.lime,
+    events: [],
+    draw(lt, d) {
+      const ctx = R.ctx;
+      ctx.fillStyle = 'dark' === 'light' ? C.paper : C.night;
+      ctx.fillRect(0, 0, W, H);
+      R.text('Data storytelling', W / 2, H / 2, { size: 90, weight: 800, align: 'center', color: 'dark' === 'light' ? C.ink : C.white });
+      R.text('À VENIR — ' + lt.toFixed(1) + ' / ' + d.toFixed(0) + ' s', W / 2, H / 2 + 70, { size: 24, family: F.mono, align: 'center', color: C.grey });
+    },
+  });
+})();
