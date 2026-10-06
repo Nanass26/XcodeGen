@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude — Motion Design Reel</title>
+<style>
+  @font-face { font-family: "Instrument Serif"; src: url(fonts/InstrumentSerif-Regular.ttf); }
+  @font-face { font-family: "Instrument Serif"; font-style: italic; src: url(fonts/InstrumentSerif-Italic.ttf); }
+  @font-face { font-family: "JetBrains Mono"; font-weight: 100 800; src: url(fonts/JetBrainsMono.ttf); }
+  @font-face { font-family: "Anton"; src: url(fonts/Anton-Regular.ttf); }
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+  canvas { position: absolute; inset: 0; margin: auto; width: min(100vw, 177.78vh); height: min(56.25vw, 100vh); }
+  body.render canvas { inset: 0 auto auto 0; margin: 0; width: 1920px; height: 1080px; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script src="engine.js"></script>
+<script>
+  // Charge les scènes dans l'ordre, puis le montage. ?only=03 : une seule scène (aperçu isolé).
+  const SCENES = ['01-ouverture', '02-typographie', '03-formes', '04-particules', '05-espace-3d',
+    '06-data', '07-ui', '08-organique', '09-transitions', '10-generique'];
+  const only = new URLSearchParams(location.search).get('only');
+  const files = SCENES.filter(n => !only || n.startsWith(only)).map(n => `scenes/${n}.js`).concat('montage.js');
+  (async () => {
+    for (const src of files) {
+      await new Promise((resolve, reject) => {
+        const el = document.createElement('script');
+        el.src = src; el.onload = resolve; el.onerror = () => reject(new Error('Chargement impossible : ' + src));
+        document.body.appendChild(el);
+      });
+    }
+  })().catch(e => { window.loadError = String(e); console.error(e); });
+</script>
+</body>
+</html>
