@@ -9,6 +9,7 @@
 //   node render.js --stills 30.5,61             images pleine taille, temps globaux -> build/still_<t>.jpg
 //   node render.js --scene 03 --bench           temps de dessin moyen par image (ms) sur la scène
 //   (avec --scene, seule cette scène est chargée : ses temps locaux sont aussi les temps globaux)
+//   node render.js --timeline                   écrit seulement build/events.json (timeline + événements sonores)
 //   options : --workers N, --out fichier
 'use strict';
 const { chromium } = require('playwright');
@@ -60,7 +61,10 @@ function encoder(out, fps) {
   if (sceneId && !sc) throw new Error('Scène inconnue : ' + sceneId);
   const toGlobal = t => (sc ? sc.s + t : t);
 
-  if (opt('sheet', null)) {
+  if (opt('timeline', null)) {
+    fs.writeFileSync(path.join(BUILD, 'events.json'), JSON.stringify(meta, null, 1));
+    console.log(path.join(BUILD, 'events.json'));
+  } else if (opt('sheet', null)) {
     const v = String(opt('sheet')).split(',').map(Number);
     let times;
     if (sc) { const n = v[0] || 12; times = Array.from({ length: n }, (_, k) => sc.s + ((k + 0.5) / n) * (sc.e - sc.s)); }
